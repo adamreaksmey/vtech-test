@@ -1,20 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
+import fetchTodo from "./api/add_to";
 
 export default function Home() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState({
+    data: [],
+    loading: true,
+    error: false,
+  });
   const [newTodo, setNewTodo] = useState("");
 
   const handleInputChange = (event) => {
     return setNewTodo(event.target.value);
   };
 
+  useEffect(() => {
+    fetchTodo();
+  }, []);
+
   const handleAddTodo = () => {
     if (newTodo.trim() !== "") {
-      setTodos([...todos, newTodo]);
+      const updatedTodos = [...todos.data, newTodo];
+      setTodos({
+        ...todos,
+        data: updatedTodos,
+      });
       setNewTodo("");
     }
-    return console.log(todos)
   };
 
   const handleDeleteTodo = (index) => {
@@ -40,7 +52,7 @@ export default function Home() {
         <button onClick={handleAddTodo}>Add Todo</button>
       </div>
       <ul>
-        {todos.map((todo, index) => (
+        {todos.data.map((todo, index) => (
           <li key={index} className="pb-2">
             {todo}{" "}
             <button onClick={() => handleDeleteTodo(index)}>Delete</button>
