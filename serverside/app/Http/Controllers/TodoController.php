@@ -7,24 +7,21 @@ use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(private Request $request, private Todo $todo)
+    {
+    }
     public function index()
     {
-        return [
-            "display" => "show"
-        ];
+        return $this->todo::orderBy('created_at', 'desc')->get();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
-        return [
-            "display" => "store"
-        ];
+        $form = $this->request->all();
+        return $this->todo->create($form);
     }
 
     /**
@@ -54,8 +51,8 @@ class TodoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Todo $todo)
+    public function destroy($id)
     {
-        //
+        return $this->todo->where("id", $id)->delete();
     }
 }

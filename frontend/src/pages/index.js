@@ -1,38 +1,60 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import fetchTodo from "./api/add_to";
+import { fetchTodo, addTodo, deleteTodo } from "./api/todo";
+import form from "@/form";
 
 export default function Home() {
-  const [todos, setTodos] = useState({
-    data: [],
-    loading: true,
-    error: false,
-  });
   const [newTodo, setNewTodo] = useState("");
-
-  const handleInputChange = (event) => {
-    return setNewTodo(event.target.value);
-  };
+  const [alltodos, setAlltodos] = useState([]);
 
   useEffect(() => {
-    fetchTodo();
+    const fetchData = async () => {
+      try {
+        const data = await fetchTodo();
+        setAlltodos(data);
+      } catch (error) {
+        console.error("Failed to fetch todos:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const handleAddTodo = () => {
-    if (newTodo.trim() !== "") {
-      const updatedTodos = [...todos.data, newTodo];
-      setTodos({
-        ...todos,
-        data: updatedTodos,
-      });
-      setNewTodo("");
+  const handleInputChange = (event) => {
+    setNewTodo(event.target.value);
+  };
+
+  const refresh = async () => {
+    try {
+      const updatedData = await fetchTodo();
+      setAlltodos(updatedData);
+    } catch (error) {
+      console.error("Failed to refresh todos:", error);
     }
   };
 
-  const handleDeleteTodo = (index) => {
-    const updatedTodos = todos.filter((_, i) => i !== index);
-    return setTodos(updatedTodos);
+  const handleAddTodo = async () => {
+    try {
+      await addTodo({ ...form, title: newTodo });
+      setNewTodo("");
+      refresh();
+    } catch (error) {
+      console.error("Failed to add todo:", error);
+    }
   };
+
+  const handleDeleteTodo = async (id) => {
+    try {
+      await deleteTodo(id);
+      refresh();
+    } catch (error) {
+      console.error("Failed to delete todo:", error);
+    }
+  };
+
+  const completeTask = async (id) => {
+
+  }
 
   return (
     <>
@@ -52,10 +74,15 @@ export default function Home() {
         <button onClick={handleAddTodo}>Add Todo</button>
       </div>
       <ul>
-        {todos.data.map((todo, index) => (
-          <li key={index} className="pb-2">
-            {todo}{" "}
-            <button onClick={() => handleDeleteTodo(index)}>Delete</button>
+        {alltodos.map((todo) => (
+          <li key={todo.id} className="pb-2">
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => completeTask(todo.id)}
+            />
+            {todo.title}{" "}
+            <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
           </li>
         ))}
       </ul>

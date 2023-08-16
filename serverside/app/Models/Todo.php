@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Todo extends Model
 {
     use HasFactory;
-    protected $table = "todo_vtech";
+    protected $table = "todos";
     protected $guarded = [
         "id",
         "created_at",
