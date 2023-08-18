@@ -17,10 +17,6 @@ class TodoController extends Controller
         return $this->todo::orderBy('created_at', 'desc')->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
     public function store()
     {
         $form = $this->request->all();
@@ -35,26 +31,19 @@ class TodoController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Todo $todo)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update($id)
     {
         $data = $this->request->all();
-        return $this->todo->where('id', $id)->update($data);
+        $this->todo->where('id', $id)->update($data);
+        return response()->json(array_merge(
+            [
+                "id" => $id,
+                "response" => Response::HTTP_CREATED
+            ],
+            $data
+        ));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         return $this->todo->where("id", $id)->delete();

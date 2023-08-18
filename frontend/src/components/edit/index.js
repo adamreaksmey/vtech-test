@@ -56,7 +56,7 @@ export default function EditModal({ props, closeModal, refresh }) {
                 type="checkbox"
                 className="form-check-input"
                 checked={task.completed}
-                onChange={() => completeTask(!task.completed)}
+                onChange={() => completeTask(Boolean(!task.completed))}
               />
             </div>
             <div className="modal-footer">
