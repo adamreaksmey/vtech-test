@@ -30,9 +30,12 @@ export default function Home() {
   };
 
   const handleAddTodo = async () => {
-    await addTodo({ ...form, title: newTodo });
-    setNewTodo("");
-    refresh();
+    if (newTodo.trim() !== "") {
+      await addTodo({ ...form, title: newTodo });
+      setNewTodo("");
+      refresh();
+    }
+    return;
   };
 
   const handleDeleteTodo = async (id) => {
