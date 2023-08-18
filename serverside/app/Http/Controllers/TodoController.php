@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Http\Response;
 
 class TodoController extends Controller
 {
@@ -18,10 +20,19 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store()
     {
         $form = $this->request->all();
-        return $this->todo->create($form);
+        $merged = array_merge([
+            "id" => Str::uuid()
+        ], $form);
+        $this->todo->create($merged);
+
+        return response()->json([
+            "data" => $merged,
+            "response" => Response::HTTP_CREATED
+        ]);
     }
 
     /**
@@ -33,19 +44,12 @@ class TodoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Todo $todo)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Todo $todo)
+    public function update($id)
     {
-        //
+        $data = $this->request->all();
+        return $this->todo->where('id', $id)->update($data);
     }
 
     /**

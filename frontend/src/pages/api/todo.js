@@ -17,10 +17,9 @@ export async function deleteTodo(id) {
   return response.data;
 }
 
-export async function completeTask(id, data) {
-  const response = await axios.put(apiUrl + "/todo", {
-    id: id,
-    completed: data,
-  });
+export async function editTodo(id, data) {
+  const response = await axios.put(apiUrl + "/todo/" + id, data);
   return response.data;
 }
+
+

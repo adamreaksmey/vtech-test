@@ -10,8 +10,11 @@ class Todo extends Model
     use HasFactory;
     protected $table = "todos";
     protected $guarded = [
-        "id",
         "created_at",
         "updated_at"
+    ];
+    
+    protected $casts = [
+        'id' => 'string'
     ];
 }
