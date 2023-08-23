@@ -14,7 +14,7 @@ class TodoController extends Controller
     }
     public function index()
     {
-        return $this->todo::orderBy('created_at', 'desc')->get();
+        return $this->todo::orderBy('title', 'asc')->get();
     }
 
     public function store()
