@@ -23,6 +23,12 @@ class TodoController extends Controller
         $merged = array_merge([
             "id" => Str::uuid()
         ], $form);
+
+        if ($this->todo->where('title', $this->request->title)->exists()) {
+            return response()->json([
+                "message" => "This task already exists!"
+            ]);
+        }
         $this->todo->create($merged);
 
         return response()->json([

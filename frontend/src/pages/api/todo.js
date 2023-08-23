@@ -9,6 +9,10 @@ export async function fetchTodo() {
 
 export async function addTodo(data) {
   const response = await axios.post(apiUrl + "/todo", data);
+  if (response.data.message) {
+    alert(JSON.stringify(response.data.message));
+    return;
+  }
   return response.data;
 }
 
@@ -21,5 +25,3 @@ export async function editTodo(id, data) {
   const response = await axios.put(apiUrl + "/todo/" + id, data);
   return response.data;
 }
-
-
