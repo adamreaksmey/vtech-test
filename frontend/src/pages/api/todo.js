@@ -2,8 +2,9 @@ import axios from "axios";
 
 const apiUrl = process.env.NEXT_PUBLIC_APU_URL;
 
-export async function fetchTodo() {
-  const response = await axios.get(apiUrl + "/todo");
+export async function fetchTodo(name) {
+  console.log(name)
+  const response = await axios.get(apiUrl + "/todo" + `?title=${name ?? ""}`);
   return response.data;
 }
 

@@ -6,11 +6,15 @@ export default function DataTable(props) {
         {alltodos.map((todo) => (
           <li
             key={todo.id}
-            className="list-group-item d-flex justify-content-between align-items-center"
+            className={
+              "list-group-item d-flex justify-content-between align-items-center"
+            }
           >
             <div className="form-check">
               {todo.completed ? <>&#10004;</> : null}
-              <label className="form-check-label">{todo.title}</label>
+              <label className="form-check-label">
+                {todo.title} {todo.updated ? "( edited )" : null}
+              </label>
             </div>
             <div className="d-flex gap-2">
               <button

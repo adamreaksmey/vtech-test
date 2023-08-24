@@ -4,16 +4,18 @@ import form from "@/form";
 import EditModal from "@/components/edit";
 import InputForm from "@/components/input";
 import DataTable from "@/components/data";
+import SearchInput from "@/components/search";
 
 export default function Home() {
   const [newTodo, setNewTodo] = useState("");
   const [alltodos, setAlltodos] = useState([]);
   const [info, setInfo] = useState("");
   const [modal, openModal] = useState(false);
+  const [searchTerm, setSearch] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchTodo();
+      const data = await fetchTodo("");
       setAlltodos(data);
     };
 
@@ -24,8 +26,8 @@ export default function Home() {
     setNewTodo(event.target.value);
   };
 
-  const refresh = async () => {
-    const updatedData = await fetchTodo();
+  const refresh = async (name) => {
+    const updatedData = await fetchTodo(name);
     setAlltodos(updatedData);
   };
 
@@ -52,6 +54,14 @@ export default function Home() {
     openModal(!modal);
   };
 
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const runSearch = async () => {
+    await refresh((name = searchTerm));
+  };
+
   return (
     <>
       {modal && (
@@ -64,6 +74,8 @@ export default function Home() {
           handleAddTodo={handleAddTodo}
           newTodo={newTodo}
         />
+        <SearchInput handleSearch={handleSearch} props={searchTerm} />
+        <button onClick={runSearch}>Search</button>
         <DataTable
           alltodos={alltodos}
           handleDeleteTodo={handleDeleteTodo}

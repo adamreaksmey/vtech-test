@@ -20,3 +20,4 @@ Route::get('/user', function (Request $request) {
 });
 
 Route::resource('/todo', TodoController::class);
+// Route::get('/search', [TodoController::class, 'searchTodo']);

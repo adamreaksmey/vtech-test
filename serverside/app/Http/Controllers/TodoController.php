@@ -14,7 +14,11 @@ class TodoController extends Controller
     }
     public function index()
     {
-        return $this->todo::orderBy('title', 'asc')->get();
+        $name = $this->request->title;
+        if (!$name) {
+            return $this->todo::orderBy('title', 'asc')->get();
+        }
+        return $this->todo->where('title', 'like', '%' . $name . '%')->get();
     }
 
     public function store()
@@ -40,7 +44,7 @@ class TodoController extends Controller
     public function update($id)
     {
         $data = $this->request->all();
-        $this->todo->where('id', $id)->update($data);
+        $this->todo->where('id', $id)->update(array_merge(["updated" => true], $data));
         return response()->json(array_merge(
             [
                 "id" => $id,
